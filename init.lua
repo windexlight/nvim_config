@@ -47,6 +47,9 @@ vim.pack.add({
   -- Neogit
   'https://github.com/neogitorg/neogit',
   'https://github.com/akinsho/toggleterm.nvim',
+  -- DAP
+  'https://github.com/mfussenegger/nvim-dap',
+  'https://github.com/igorlfs/nvim-dap-view',
 })
 
 require('fzf-lua').setup {
@@ -214,6 +217,7 @@ require('config.qmk')
 require('config.keymaps')
 require('config.autocmds')
 require('config.usercmds')
+require('config.dap')
 
 require('gitsigns').setup {
   on_attach = require('config.keymaps').gitsigns_on_attach
