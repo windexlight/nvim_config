@@ -82,7 +82,14 @@ require('mini.files').setup {
 require('mini.bufremove').setup {}
 require('mini.trailspace').setup {}
 -- require('mini.cursorword').setup {}
-require('mini.indentscope').setup {}
+local indentscope = require('mini.indentscope')
+indentscope.setup {
+  draw = {
+    delay = 0,
+    animation = indentscope.gen_animation.none(),
+  },
+  symbol = '│',
+}
 local map = require('mini.map')
 map.setup({
   integrations = {
