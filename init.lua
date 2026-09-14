@@ -75,6 +75,7 @@ require('fzf-lua').setup {
     end,
   },
 }
+require('fzf-lua').register_ui_select()
 require('mini.completion').setup {}
 require('quicker').setup {}
 require('mini.files').setup {
