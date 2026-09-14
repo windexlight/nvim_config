@@ -10,7 +10,7 @@ local dap = require('dap')
 -- pip install debugpy
 -- TODO - If adapting for linux, follow something more like here: https://codeberg.org/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
 
-dap.adapters.python = function(cb, config)
+dap.adapters.debugpy = function(cb, config)
   if config.request == 'attach' then
     ---@diagnostic disable-next-line: undefined-field
     local port = (config.connect or config).port
@@ -33,33 +33,52 @@ dap.adapters.python = function(cb, config)
       options = {
         source_filetype = 'python',
       },
+      enrich_config = function(cfg, on_config)
+        local final_config = vim.deepcopy(cfg)
+        if not final_config.pythonPath then
+          -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
+          -- The code below looks for a `venv` or `.venv` folder in the current directory and uses the python within.
+          -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
+          local cwd = vim.fn.getcwd()
+          if vim.fn.executable(cwd .. [[\venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
+            final_config.pythonPath = cwd .. [[\venv\Scripts\python.exe]]
+          elseif vim.fn.executable(cwd .. [[\.venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
+            final_config.pythonPath = cwd .. [[\.venv\Scripts\python.exe]]
+          else
+            local appdata = os.getenv("LOCALAPPDATA")
+            final_config.pythonPath = appdata .. [[\Programs\Python\Python314\python.exe]]
+          end
+        end
+        on_config(final_config)
+      end,
     })
   end
 end
 
-dap.configurations.python = {
-  {
-    -- The first three options are required by nvim-dap
-    type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
-    request = 'launch';
-    name = "Launch file";
+-- dap.configurations.python = {
+--   {
+--     -- The first three options are required by nvim-dap
+--     type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
+--     request = 'launch';
+--     name = "Launch file";
+--
+--     -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
+--
+--     program = "${file}"; -- This configuration will launch the current file if used.
+--     pythonPath = function()
+--       -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
+--       -- The code below looks for a `venv` or `.venv` folder in the current directory and uses the python within.
+--       -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
+--       local cwd = vim.fn.getcwd()
+--       if vim.fn.executable(cwd .. [[\venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
+--         return cwd .. [[\venv\Scripts\python.exe]]
+--       elseif vim.fn.executable(cwd .. [[\.venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
+--         return cwd .. [[\.venv\Scripts\python.exe]]
+--       else
+--         local appdata = os.getenv("LOCALAPPDATA")
+--         return appdata .. [[\Programs\Python\Python314\python.exe]]
+--       end
+--     end;
+--   },
+-- }
 
-    -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
-
-    program = "${file}"; -- This configuration will launch the current file if used.
-    pythonPath = function()
-      -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
-      -- The code below looks for a `venv` or `.venv` folder in the current directory and uses the python within.
-      -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
-      local cwd = vim.fn.getcwd()
-      if vim.fn.executable(cwd .. [[\venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
-        return cwd .. [[\venv\Scripts\python.exe]]
-      elseif vim.fn.executable(cwd .. [[\.venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
-        return cwd .. [[\.venv\Scripts\python.exe]]
-      else
-        local appdata = os.getenv("LOCALAPPDATA")
-        return appdata .. [[\Programs\Python\Python314\python.exe]]
-      end
-    end;
-  },
-}

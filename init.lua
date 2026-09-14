@@ -210,6 +210,16 @@ require("toggleterm").setup {
   end,
 }
 
+require('dap-view').setup {
+  winbar = {
+    default_section = "scopes",
+    controls = {
+      enabled = true,
+    },
+  },
+  auto_toggle = true,
+}
+
 require('config.options')
 require('config.diagnostics')
 require('config.treesitter')
