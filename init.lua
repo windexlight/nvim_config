@@ -212,10 +212,14 @@ require("toggleterm").setup {
 
 require('dap-view').setup {
   winbar = {
+    sections = { "console", "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
     default_section = "scopes",
     controls = {
       enabled = true,
     },
+  },
+  virtual_text = {
+    enabled = true,
   },
   auto_toggle = true,
 }

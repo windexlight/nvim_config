@@ -332,6 +332,17 @@ end, { desc = 'grug-far: Search within range' })
 --   end,
 -- })
 
+-- DAP
+map('n', '<F5>', function() require('dap').continue() end)
+map('n', '<F10>', function() require('dap').step_over() end)
+map('n', '<F11>', function() require('dap').step_into() end)
+map('n', '<F12>', function() require('dap').step_out() end)
+map('n', '<leader>bp', function() require('dap').toggle_breakpoint() end)
+-- map('n', '<leader>B', function() require('dap').set_breakpoint() end)
+map('n', '<leader>lp', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
+-- map('n', '<leader>dr', function() require('dap').repl.open() end)
+-- map('n', '<leader>dl', function() require('dap').run_last() end)
+
 -- Open Neogit
 map("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Open Neogit UI" })
 
