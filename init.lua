@@ -50,6 +50,8 @@ vim.pack.add({
   -- DAP
   'https://github.com/mfussenegger/nvim-dap',
   'https://github.com/igorlfs/nvim-dap-view',
+  -- Task runner
+  'https://github.com/stevearc/overseer.nvim',
 })
 
 require('fzf-lua').setup {
@@ -223,6 +225,8 @@ require('dap-view').setup {
   },
   auto_toggle = true,
 }
+
+require("overseer").setup {}
 
 require('config.options')
 require('config.diagnostics')

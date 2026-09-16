@@ -343,6 +343,10 @@ map('n', '<leader>lp', function() require('dap').set_breakpoint(nil, nil, vim.fn
 -- map('n', '<leader>dr', function() require('dap').repl.open() end)
 -- map('n', '<leader>dl', function() require('dap').run_last() end)
 
+-- Overseer
+map('n', '<leader>or', '<cmd>OverseerRun<cr>')
+map('n', '<leader>ot', '<cmd>OverseerToggle<cr>')
+
 -- Open Neogit
 map("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Open Neogit UI" })
 
