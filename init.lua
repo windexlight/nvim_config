@@ -204,7 +204,7 @@ for option, value in pairs(powershell_options) do
   vim.opt[option] = value
 end
 require("toggleterm").setup {
-  open_mapping = "gt",
+  -- open_mapping = "gt", -- Note: this screws up the g key in insert mode, using a regular mapping instead
   hide_numbers = false,
   on_open = function(term)
     vim.wo[term.window].number = true
