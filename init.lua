@@ -8,6 +8,20 @@ vim.g.maplocalleader = '\\'
 -- Enable UI2
 require('vim._core.ui2').enable()
 
+-- Determine OS
+local os_info = vim.uv.os_uname()
+OS_INFO = {}
+if os_info.sysname:lower():find("windows") then
+  OS_INFO.windows = true
+elseif os_info.sysname:lower() == "linux" then
+  OS_INFO.linux = true
+  if os_info.release:lower():find("wsl") ~= nil then
+    OS_INFO.wsl = true
+  end
+elseif os_info.sysname:lower() == "darwin" then
+  OS_INFO.mac = true
+end
+
 -- PLUGINS
 
 -- Add the "nohlsearch" package to automatically disable search highlighting after
@@ -192,17 +206,21 @@ require("diffview").setup {
     },
   },
 }
-local powershell_options = {
-  shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
-  shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
-  shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
-  shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
-  shellquote = "",
-  shellxquote = "",
-}
-for option, value in pairs(powershell_options) do
-  vim.opt[option] = value
+
+if OS_INFO.windows then
+  local powershell_options = {
+    shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
+    shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+    shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+    shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+    shellquote = "",
+    shellxquote = "",
+  }
+  for option, value in pairs(powershell_options) do
+    vim.opt[option] = value
+  end
 end
+
 require("toggleterm").setup {
   -- open_mapping = "gt", -- Note: this screws up the g key in insert mode, using a regular mapping instead
   hide_numbers = false,

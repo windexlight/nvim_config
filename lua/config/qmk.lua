@@ -4,7 +4,40 @@ local last_notified_mode = nil
 local pending = false
 
 -- RPC stuff for QMK
-vim.fn.serverstart([[\\.\pipe\nvim-win-]] .. vim.fn.getpid())
+if OS_INFO.windows then
+  -- Start RPC server with a name containing Windows pid, so we can find it based on foreground Window
+  vim.fn.serverstart([[\\.\pipe\nvim-win-]] .. vim.fn.getpid())
+elseif OS_INFO.linux then
+  if OS_INFO.wsl then
+    -- Open a temporary RPC server with an id passed in via env var, then receive a Windows PIDN
+    -- over RPC, and use that to start a new server with the Windows PID in the name.
+    -- This it all so that a Windows side process can find our WSL nvim RPC socket based on
+    -- getting a PID from a window, and the PID can't be passed into the environment at launch,
+    -- because it doesn't exist yet.
+    local launch_id = os.getenv("NVIM_LAUNCH_ID")
+    if launch_id and launch_id ~= "" then
+      local handshake_sock = "/tmp/nvim-handshake-" .. launch_id .. ".sock"
+      vim.fn.serverstart(handshake_sock)
+      _G.ReceiveWindowsPid = function(win_pid)
+        vim.schedule(function()
+          if win_pid and win_pid ~= "" then
+            local final_socket = "/tmp/nvim-win-" .. tostring(win_pid) .. ".sock"
+            vim.fn.serverstart(final_socket)
+            vim.fn.serverstop(handshake_sock)
+            os.remove(handshake_sock)
+          end
+        end)
+        return "HANDSHAKE_COMPLETE"
+      end
+    else
+      vim.fn.serverstart("/tmp/nvim-wsl-" .. vim.fn.getpid() .. ".sock")
+    end
+  else
+    -- TODO - non-WSL Linux
+  end
+elseif OS_INFO.darwin then
+  -- TODO -- mac
+end
 
 -- Notify via RPC when mode changes
 local function commit_mode()

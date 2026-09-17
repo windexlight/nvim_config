@@ -208,11 +208,13 @@ vim.api.nvim_create_user_command('LcdLspRoot', function() cd_to_lsp_root(true) e
 map('n', '<leader>cd', ':CdLspRoot<CR>', { desc = 'CD to LSP root' })
 map('n', '<leader>lcd', ':LcdLspRoot<CR>', { desc = 'LCD to LSP root' })
 
--- Open Alacritty to current cwd
-map('n', '<leader>cm', ':call jobstart(\'cmd /c start "" "alacritty"\', {\'detach\': 1})<CR>', { desc = 'Open Alacritty' })
+if OS_INFO.windows then
+  -- Open Alacritty to current cwd
+  map('n', '<leader>cm', ':call jobstart(\'cmd /c start "" "alacritty"\', {\'detach\': 1})<CR>', { desc = 'Open Alacritty' })
 
--- Open Explorer to current cwd
-map('n', '<leader>ii', ':call jobstart(\'cmd /c start .\')<CR>', { desc = 'Open Explorer' })
+  -- Open Explorer to current cwd
+  map('n', '<leader>ii', ':call jobstart(\'cmd /c start .\')<CR>', { desc = 'Open Explorer' })
+end
 
 -- nvim-treesitter-textobjects keymaps
 -- map({ "x", "o" }, "am", function() require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects") end)

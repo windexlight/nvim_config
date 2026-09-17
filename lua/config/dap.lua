@@ -8,7 +8,6 @@ local dap = require('dap')
 -- debugpy\scripts\Activate.ps1
 -- pip install --upgrade pip
 -- pip install debugpy
--- TODO - If adapting for linux, follow something more like here: https://codeberg.org/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
 
 -- Set K to open nvim-dap-view hover when debug session running
 local api = vim.api
@@ -64,10 +63,9 @@ dap.adapters.debugpy = function(cb, config)
       },
     })
   else
-    local home = os.getenv("USERPROFILE")
     cb({
       type = 'executable',
-      command = home .. [[\.virtualenvs\debugpy\Scripts\python.exe]], -- TODO - will be bin instead of Scripts on linux
+      command = OS_INFO.windows and os.getenv("USERPROFILE") .. [[\.virtualenvs\debugpy\Scripts\python.exe]] or '~/.virtualenvs/debugpy/bin/python',
       args = { '-m', 'debugpy.adapter' },
       options = {
         source_filetype = 'python',
@@ -79,13 +77,19 @@ dap.adapters.debugpy = function(cb, config)
           -- The code below looks for a `venv` or `.venv` folder in the current directory and uses the python within.
           -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
           local cwd = vim.fn.getcwd()
-          if vim.fn.executable(cwd .. [[\venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
-            final_config.pythonPath = cwd .. [[\venv\Scripts\python.exe]]
-          elseif vim.fn.executable(cwd .. [[\.venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
-            final_config.pythonPath = cwd .. [[\.venv\Scripts\python.exe]]
+          local venv_path1 = cwd .. (OS_INFO.windows and [[\venv\Scripts\python.exe]] or '/venv/bin/python')
+          local venv_path2 = cwd .. (OS_INFO.windows and [[\.venv\Scripts\python.exe]] or '/.venv/bin/python')
+          if vim.fn.executable(venv_path1) == 1 then
+            final_config.pythonPath = venv_path1
+          elseif vim.fn.executable(venv_path2) == 1 then
+            final_config.pythonPath = venv_path2
           else
-            local appdata = os.getenv("LOCALAPPDATA")
-            final_config.pythonPath = appdata .. [[\Programs\Python\Python314\python.exe]]
+            -- TODO -- Use which (or win equivalent) to find default python instead of assuming here
+            if OS_INFO.windows then
+              final_config.pythonPath = os.getenv("LOCALAPPDATA") .. [[\Programs\Python\Python314\python.exe]]
+            else
+              final_config.pythonPath = '/usr/bin/python'
+            end
           end
         end
         on_config(final_config)
@@ -93,31 +97,4 @@ dap.adapters.debugpy = function(cb, config)
     })
   end
 end
-
--- dap.configurations.python = {
---   {
---     -- The first three options are required by nvim-dap
---     type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
---     request = 'launch';
---     name = "Launch file";
---
---     -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
---
---     program = "${file}"; -- This configuration will launch the current file if used.
---     pythonPath = function()
---       -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
---       -- The code below looks for a `venv` or `.venv` folder in the current directory and uses the python within.
---       -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
---       local cwd = vim.fn.getcwd()
---       if vim.fn.executable(cwd .. [[\venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
---         return cwd .. [[\venv\Scripts\python.exe]]
---       elseif vim.fn.executable(cwd .. [[\.venv\Scripts\python.exe]]) == 1 then -- TODO - will be bin instead of Scripts on linux
---         return cwd .. [[\.venv\Scripts\python.exe]]
---       else
---         local appdata = os.getenv("LOCALAPPDATA")
---         return appdata .. [[\Programs\Python\Python314\python.exe]]
---       end
---     end;
---   },
--- }
 
