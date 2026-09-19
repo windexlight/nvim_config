@@ -54,7 +54,7 @@ opt.undofile = true -- Persistent undo
 opt.undolevels = 10000
 opt.updatetime = 200 -- Save swap file and trigger CursorHold
 opt.timeoutlen = 1000 -- Custom multi-key command timeout
-opt.ttimeoutlen = 0 -- Key code timeout (affects esoteric things)
+opt.ttimeoutlen = 10 -- Key code timeout (too high, and esc feels laggy, too low, and terminal codes can get broken up resulting in bad input being processed)
 opt.autoread = true -- Auto reload files changed outside vim
 opt.autowrite = false -- Auto save
 
