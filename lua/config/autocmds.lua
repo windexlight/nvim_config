@@ -119,3 +119,17 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Test focus autocmds
+vim.api.nvim_create_autocmd({ "FocusGained", "VimEnter" }, {
+  pattern = "*",
+  callback = function()
+    print("Neovim gained focus")
+  end,
+})
+
+vim.api.nvim_create_autocmd("FocusLost", {
+  callback = function()
+    print("Neovim lost focus")
+  end,
+})
+
