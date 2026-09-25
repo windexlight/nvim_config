@@ -45,8 +45,11 @@ vim.pack.add({
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
   'https://github.com/nvim-treesitter/nvim-treesitter-context',
+  -- Completion
+  'https://github.com/saghen/blink.lib',
+  'https://github.com/saghen/blink.cmp',
   -- Mini.nvim
-  'https://github.com/nvim-mini/mini.completion',
+  -- 'https://github.com/nvim-mini/mini.completion',
   'https://github.com/nvim-mini/mini.files',
   'https://github.com/nvim-mini/mini.ai',
   'https://github.com/nvim-mini/mini.bufremove',
@@ -92,7 +95,10 @@ require('fzf-lua').setup {
   },
 }
 require('fzf-lua').register_ui_select()
-require('mini.completion').setup {}
+-- require('mini.completion').setup {}
+local cmp = require('blink.cmp')
+cmp.build():pwait()
+cmp.setup()
 require('quicker').setup {}
 require('mini.files').setup {
   mappings = {
@@ -186,6 +192,22 @@ require('mini.ai').setup {
   -- │   │    Default    │ aa_*b__cc___     │ [4;7]  │ [4;5]  │ [8;12] │ [8;9]  │
   -- │   │   (typed _)   │                  │        │        │        │        │
   -- └───┴───────────────┴──────────────────┴────────┴────────┴────────┴────────┘
+}
+
+require'treesitter-context'.setup{
+  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+  multiwindow = false, -- Enable multiwindow support.
+  max_lines = 4, -- How many lines the window should span. Values <= 0 mean no limit.
+  min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+  line_numbers = true,
+  multiline_threshold = 1, -- Maximum number of lines to show for a single context
+  trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+  mode = 'cursor',  -- Line used to calculate context. Choices: 'cursor', 'topline'
+  -- Separator between context and content. Should be a single character string, like '-'.
+  -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+  separator = nil,
+  zindex = 20, -- The Z-index of the context window
+  on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
 }
 
 require('grug-far').setup {}
