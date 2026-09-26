@@ -18,6 +18,9 @@ end
 
 -- Notify via RPC when we gain or lose focus
 -- Also, notify that we have focus when getting an F24 press, used to query on new nvim instance connect
+vim.keymap.set("", "<F24>", function ()
+  vim.rpcnotify(0, "focus_change", "gain")
+end)
 vim.keymap.set("", "<C-M-S-F12>", function ()
   vim.rpcnotify(0, "focus_change", "gain")
 end)
