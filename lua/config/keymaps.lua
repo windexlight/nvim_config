@@ -352,6 +352,9 @@ map('n', 'gt', '<cmd>ToggleTerm<cr>')
 map('n', '<leader>or', '<cmd>OverseerRun<cr>')
 map('n', '<leader>ot', '<cmd>OverseerToggle<cr>')
 
+-- Workspaces fzf-lua
+map("n", "<leader>fw", require("config.workspaces").open_workspace_fzf, { desc = "Find Workspaces (fzf-lua)" })
+
 -- Open Neogit
 map("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Open Neogit UI" })
 

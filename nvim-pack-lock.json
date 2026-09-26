@@ -107,6 +107,10 @@
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
       "src": "https://github.com/akinsho/toggleterm.nvim"
+    },
+    "workspaces.nvim": {
+      "rev": "55a1eb6f5b72e07ee8333898254e113e927180ca",
+      "src": "https://github.com/natecraddock/workspaces.nvim"
     }
   }
 }

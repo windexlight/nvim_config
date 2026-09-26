@@ -70,6 +70,8 @@ vim.pack.add({
   'https://github.com/igorlfs/nvim-dap-view',
   -- Task runner
   'https://github.com/stevearc/overseer.nvim',
+  -- Workspaces
+  'https://github.com/natecraddock/workspaces.nvim',
 })
 
 require('fzf-lua').setup {
@@ -269,6 +271,7 @@ require('dap-view').setup {
 }
 
 require("overseer").setup {}
+require("workspaces").setup {}
 
 require('config.options')
 require('config.diagnostics')
