@@ -483,11 +483,13 @@ local function mini_ai_move_cursor(side, params)
         cover_opts.search_method = 'cover'
         new_opts.reference_region = _G.MiniAi.find_textobject('a', tobj_id, cover_opts)
       end
-      -- If visual mode, go back to normal and jump to beginning of selection
-      if vim.fn.mode():match("^[vV\27]") ~= nil then
-        local esc = vim.api.nvim_replace_termcodes('<esc>', true, false, true)
-        vim.api.nvim_feedkeys(esc, 'x', false)
-        vim.cmd("normal! `<")
+      if params.select then
+        -- If visual mode, go back to normal and jump to beginning of selection
+        if vim.fn.mode():match("^[vV\27]") ~= nil then
+          local esc = vim.api.nvim_replace_termcodes('<esc>', true, false, true)
+          vim.api.nvim_feedkeys(esc, 'x', false)
+          vim.cmd("normal! `<")
+        end
       end
       -- Always move cursor first, than select what we moved to if needed
       _G.MiniAi.move_cursor(side, opts.ai_type or params.ai_type or 'a', tobj_id, new_opts)
@@ -507,17 +509,19 @@ end
 -- Keymaps for mini.ai better text object motions
 map({'n', 'o', 'x'}, 'gl', function () mini_ai_move_cursor('left', { forward = true, next = 'next', prev = 'prev_or_cover' }) end)
 map({'n', 'o', 'x'}, 'gh', function () mini_ai_move_cursor('left', { forward = false, next = 'next', prev = 'prev_or_cover' }) end)
-map({'n', 'o', 'x'}, 'gL', function () mini_ai_move_cursor('left', { forward = true, next = 'next_sibling', prev = 'cover_or_prev' }) end)
-map({'n', 'o', 'x'}, 'gH', function () mini_ai_move_cursor('left', { forward = false, next = 'next_sibling', prev = 'cover_or_prev' }) end)
-map({'n', 'o', 'x'}, 'gj', function () mini_ai_move_cursor('right', { forward = true, next = 'next_or_cover', prev = 'prev', ai_type = 'i' }) end)
-map({'n', 'o', 'x'}, 'gk', function () mini_ai_move_cursor('right', { forward = true, next = 'next_or_cover', prev = 'prev' }) end)
-map({'n', 'o', 'x'}, 'gJ', function () mini_ai_move_cursor('right', { forward = false, next = 'next_or_cover', prev = 'prev', ai_type = 'i' }) end)
-map({'n', 'o', 'x'}, 'gK', function () mini_ai_move_cursor('right', { forward = false, next = 'next_or_cover', prev = 'prev' }) end)
+map({'n', 'o', 'x'}, 'gj', function () mini_ai_move_cursor('left', { forward = true, next = 'next_sibling', prev = 'cover_or_prev' }) end)
+map({'n', 'o', 'x'}, 'gk', function () mini_ai_move_cursor('left', { forward = false, next = 'next_sibling', prev = 'cover_or_prev' }) end)
+map({'n', 'o', 'x'}, 'ggl', function () mini_ai_move_cursor('left', { forward = true, next = 'next', prev = 'prev_or_cover', ai_type = 'i' }) end)
+map({'n', 'o', 'x'}, 'ggh', function () mini_ai_move_cursor('left', { forward = false, next = 'next', prev = 'prev_or_cover', ai_type = 'i' }) end)
+map({'n', 'o', 'x'}, 'ggj', function () mini_ai_move_cursor('right', { forward = true, next = 'next_or_cover', prev = 'prev', ai_type = 'i' }) end)
+map({'n', 'o', 'x'}, 'ggk', function () mini_ai_move_cursor('right', { forward = false, next = 'next_or_cover', prev = 'prev', ai_type = 'i' }) end)
 
-map({'n', 'o', 'x'}, 'sl', function () mini_ai_move_cursor('left', { select = true, forward = true, next = 'next', prev = 'prev_or_cover' }) end)
-map({'n', 'o', 'x'}, 'sh', function () mini_ai_move_cursor('left', { select = true, forward = false, next = 'next', prev = 'prev_or_cover' }) end)
-map({'n', 'o', 'x'}, 'sL', function () mini_ai_move_cursor('left', { select = true, forward = true, next = 'next_sibling', prev = 'cover_or_prev' }) end)
-map({'n', 'o', 'x'}, 'sH', function () mini_ai_move_cursor('left', { select = true, forward = false, next = 'next_sibling', prev = 'cover_or_prev' }) end)
+-- Keeping these disabled mostly because I can't think of good keymaps for them. Want to use s for mini.surrount, and using v like this makes getting into v mode too laggy
+-- They're of marginal value anyway, probably.
+-- map({'n', 'o', 'x'}, 'vl', function () mini_ai_move_cursor('left', { select = true, forward = true, next = 'next', prev = 'prev_or_cover' }) end)
+-- map({'n', 'o', 'x'}, 'vh', function () mini_ai_move_cursor('left', { select = true, forward = false, next = 'next', prev = 'prev_or_cover' }) end)
+-- map({'n', 'o', 'x'}, 'vj', function () mini_ai_move_cursor('left', { select = true, forward = true, next = 'next_sibling', prev = 'cover_or_prev' }) end)
+-- map({'n', 'o', 'x'}, 'vk', function () mini_ai_move_cursor('left', { select = true, forward = false, next = 'next_sibling', prev = 'cover_or_prev' }) end)
 
 -- Repeat movement with ; and ,
 -- ensure ; goes forward and , goes backward regardless of the last direction
