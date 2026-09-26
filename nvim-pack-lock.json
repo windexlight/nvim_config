@@ -56,6 +56,10 @@
       "rev": "86a150f1556d0293194d0327f7b4cb97c87920bb",
       "src": "https://github.com/nvim-mini/mini.map"
     },
+    "mini.surround": {
+      "rev": "33a2ebe5df8eb4751828fcba133e18ed0fbbdfab",
+      "src": "https://github.com/nvim-mini/mini.surround"
+    },
     "mini.trailspace": {
       "rev": "82c4fb7d4336f8824ca6c97068932886b56326d0",
       "src": "https://github.com/nvim-mini/mini.trailspace"

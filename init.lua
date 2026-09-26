@@ -52,6 +52,7 @@ vim.pack.add({
   -- 'https://github.com/nvim-mini/mini.completion',
   'https://github.com/nvim-mini/mini.files',
   'https://github.com/nvim-mini/mini.ai',
+  'https://github.com/nvim-mini/mini.surround',
   'https://github.com/nvim-mini/mini.bufremove',
   'https://github.com/nvim-mini/mini.trailspace',
   -- 'https://github.com/nvim-mini/mini.cursorword',
@@ -105,6 +106,7 @@ require('mini.files').setup {
     reset = '_',
   }
 }
+require('mini.surround').setup {}
 require('mini.bufremove').setup {}
 require('mini.trailspace').setup {}
 -- require('mini.cursorword').setup {}
