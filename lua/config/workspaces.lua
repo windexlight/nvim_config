@@ -3,20 +3,16 @@ local fzf = require("fzf-lua")
 
 M = {}
 
--- TODO - why is this so slow?
+-- TODO - Why does this randomly take 3-4 seconds to populate? Tried a few things, including passing list in a file, but didn't help.
 M.open_workspace_fzf = function ()
-  local function get_formatted_entries()
-    local list = workspaces.get()
-    local entries = {}
-    for _, item in ipairs(list) do
-      table.insert(entries, string.format("%-20s %s", item.name, item.path))
-    end
-    return entries
+  local list = workspaces.get()
+  local entries = {}
+  for _, item in ipairs(list) do
+    table.insert(entries, string.format("%-20s %s", item.name, item.path))
   end
 
-  fzf.fzf_exec(get_formatted_entries(), {
+  fzf.fzf_exec(entries, {
     prompt = "Workspaces> ",
-    -- Display helpful keymap hints in the fzf footer
     fzf_opts = {
       ["--header"] = "ctrl-a: Add CWD | ctrl-d: Delete selected",
     },
@@ -35,7 +31,7 @@ M.open_workspace_fzf = function ()
         vim.ui.input({ prompt = "Workspace name for current directory: " }, function(name)
           if name and name ~= "" then
             workspaces.add(vim.fn.getcwd(), name)
-            -- vim.notify("Workspace added: " .. name, vim.log.levels.INFO)
+            print("Workspace added: " .. name, vim.log.levels.INFO)
           end
         end)
       end,
@@ -46,7 +42,7 @@ M.open_workspace_fzf = function ()
         local name = selected[1]:match("^(%S+)")
         if name then
           workspaces.remove(name)
-          -- vim.notify("Workspace removed: " .. name, vim.log.levels.WARN)
+          print("Workspace removed: " .. name, vim.log.levels.WARN)
         end
       end,
     },
