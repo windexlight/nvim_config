@@ -284,7 +284,7 @@ vim.api.nvim_create_autocmd("User", {
 
     -- Keymap to open grug-far with current mini.files column
     map("n", "gs", function()
-      local state = require("mini.files").get_explorer_state()
+      local state = MiniFiles.get_explorer_state()
       if not state or not state.branch or not state.depth_focus then return end
       local path = state.branch[state.depth_focus]
       if not path then return end
@@ -304,17 +304,52 @@ vim.api.nvim_create_autocmd("User", {
       end
     end, { buffer = args.data.buf_id, desc = "Search in directory" })
 
+    local function normalize_path(path)
+      if not path then return "" end
+      local norm = vim.fs.normalize(path)
+      return norm
+      -- return (norm:gsub("^([A-Za-z]):/+", "%1:\\"):gsub("/", "\\"))
+    end
+
+    local function do_something_with_column_path(something, msg)
+      local state = MiniFiles.get_explorer_state()
+      if not state or not state.branch or not state.depth_focus then return end
+      local path = normalize_path(state.branch[state.depth_focus])
+      if not path then return end
+      something(path)
+      print(msg .. ": " .. path)
+    end
+
     -- Keymap to set cwd to current mini.files column
     map("n", ".", function()
-      local state = require("mini.files").get_explorer_state()
-      if not state or not state.branch or not state.depth_focus then return end
-      local path = state.branch[state.depth_focus]
-      if not path then return end
-      vim.fn.chdir(path)
-      print("CWD changed to: " .. path)
+      do_something_with_column_path(vim.fn.chdir, "CWD changed to")
     end, { buffer = args.data.buf_id, desc = "Set CWD to current column directory" })
+
+    -- Keymap to yank current mini.files column path
+    map("n", "ggy", function()
+      do_something_with_column_path(function(path) vim.fn.setreg("+", path) end, "Yanked folder path")
+    end, { buffer = args.data.buf_id, desc = "Yank current column directory" })
+
+    -- Keymap to yank current mini.files line path
+    map("n", "gy", function()
+      local path = normalize_path(MiniFiles.get_fs_entry().path)
+      vim.fn.setreg("+", path)
+      print("Yanked line path: " .. path)
+    end, { buffer = args.data.buf_id, desc = "Yank current line path" })
   end,
 })
+
+-- Yank file paths of current buffer
+vim.keymap.set("n", "<leader>yp", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  print("Yanked buffer path: " .. path)
+end, { desc = "Yank absolute buffer path" })
+vim.keymap.set("n", "<leader>yrp", function()
+  local path = vim.fn.expand("%")
+  vim.fn.setreg("+", path)
+  print("Yanked buffer path: " .. path)
+end, { desc = "Yank relative buffer path" })
 
 -- Open Grug-Far, smart visual selection behavior
 map({ 'n', 'x' }, '<leader>si', function()
