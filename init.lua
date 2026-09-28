@@ -5,6 +5,9 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = '\\'
 
+-- Enable undotree native plugin
+vim.cmd('packadd nvim.undotree')
+
 -- Enable UI2
 require('vim._core.ui2').enable()
 

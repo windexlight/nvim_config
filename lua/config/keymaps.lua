@@ -42,6 +42,9 @@ for _, move in ipairs(moves) do
   end, { expr = true, silent = true })
 end
 
+-- Toggle undotree
+map({'n', 'x'}, '<leader>ut', '<cmd>Undotree<cr>', { desc = 'Toggle Undotree' })
+
 -- Clear multicursors
 map({'n'}, '<leader>Q', function ()
   local mc_ns = vim.api.nvim_create_namespace('nvim.multicursor')
