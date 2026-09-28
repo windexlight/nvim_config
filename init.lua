@@ -39,6 +39,8 @@ vim.pack.add({
   'https://github.com/stevearc/quicker.nvim',
   -- Git integration
   'https://github.com/lewis6991/gitsigns.nvim',
+  -- Status column
+  'https://github.com/luukvbaal/statuscol.nvim',
   -- Color scheme
   'https://github.com/sainnhe/gruvbox-material',
   -- Treesitter
@@ -272,7 +274,21 @@ require('dap-view').setup {
 
 require("overseer").setup {}
 require("workspaces").setup {}
-
+require('statuscol').setup({
+  relculright = true,
+  -- segments = {
+  --   { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
+  --   {
+  --     sign = { namespace = { 'diagnostic/signs' }, maxwidth = 2, auto = true },
+  --     click = 'v:lua.ScSa'
+  --   },
+  --   { text = { builtin.lnumfunc }, click = 'v:lua.ScLa', },
+  --   {
+  --     sign = { name = { '.*' }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
+  --     click = 'v:lua.ScSa'
+  --   },
+  -- }
+})
 require('config.options')
 require('config.diagnostics')
 require('config.treesitter')
