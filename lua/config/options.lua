@@ -115,6 +115,16 @@ opt.spelllang = { "en" }
 -- opt.statuscolumn = [[%!v:lua.LazyVim.statuscolumn()]]
 -- opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
 
+opt.listchars = {
+  tab = '» ',
+  trail = '·',
+  lead = '·',
+  multispace = '·',
+  nbsp = '␣',
+  extends = '…',
+  precedes = '…',
+}
+
 -- Put cwd on statusline
 function _G.get_cwd()
   local cwd = vim.fn.getcwd()
