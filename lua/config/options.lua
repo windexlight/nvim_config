@@ -16,9 +16,9 @@ opt.wrap = false -- Disable line wrap
 opt.scrolloff = 4 -- Lines of context
 opt.sidescrolloff = 8 -- Columns of context
 
-opt.tabstop = 2 -- Number of spaces tabs count for
-opt.shiftwidth = 2 -- Size of an indent
-opt.softtabstop = 2 -- Soft tab stop
+opt.tabstop = 4 -- Number of spaces tabs count for
+opt.shiftwidth = 4 -- Size of an indent
+opt.softtabstop = 4 -- Soft tab stop
 opt.expandtab = true -- Use spaces instead of tabs
 opt.smartindent = true -- Insert indents automatically
 opt.autoindent = true -- Copy indent from current line
