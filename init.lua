@@ -309,6 +309,7 @@ require('gitsigns').setup {
 vim.g.gruvbox_material_enable_italic = true
 vim.g.gruvbox_material_background = 'medium'
 vim.cmd.colorscheme('gruvbox-material')
+vim.api.nvim_set_hl(0, "Whitespace", { fg = "#443E3A" })
 
 -- Neovide config
 if vim.g.neovide then
