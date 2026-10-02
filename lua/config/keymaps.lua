@@ -12,6 +12,25 @@ map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 -- New file
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
+-- Remap multicursor
+map({'n', 'x'}, 'M', 'Q')
+
+-- Clear multicursors
+map({'n'}, '<leader>M', function ()
+  local mc_ns = vim.api.nvim_create_namespace('nvim.multicursor')
+  vim.api.nvim_buf_clear_namespace(0, mc_ns, 0, -1)
+end)
+
+-- Keep old Q behavior
+map('n', 'Q', function()
+  local reg = vim.fn.reg_recorded()
+  return reg == '' and '' or ('@' .. reg)
+end, { expr = true })
+map('x', 'Q',
+  "mode() ==# 'V' ? ':normal! @<C-R>=reg_recorded()<CR><CR>' : 'Q'",
+  { silent = true, expr = true, desc = ':help v_Q-default' }
+)
+
 -- Better indenting in visual mode
 map("x", "<", "<gv")
 map("x", ">", ">gv")
@@ -44,12 +63,6 @@ end
 
 -- Toggle undotree
 map({'n', 'x'}, '<leader>ut', '<cmd>Undotree<cr>', { desc = 'Toggle Undotree' })
-
--- Clear multicursors
-map({'n'}, '<leader>Q', function ()
-  local mc_ns = vim.api.nvim_create_namespace('nvim.multicursor')
-  vim.api.nvim_buf_clear_namespace(0, mc_ns, 0, -1)
-end)
 
 -- Move to window using the <ctrl> hjkl keys
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
