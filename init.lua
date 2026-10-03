@@ -77,6 +77,8 @@ vim.pack.add({
   'https://github.com/stevearc/overseer.nvim',
   -- Workspaces
   'https://github.com/natecraddock/workspaces.nvim',
+  -- Snippets
+  'https://github.com/rafamadriz/friendly-snippets',
 })
 
 require('fzf-lua').setup {
