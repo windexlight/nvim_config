@@ -45,7 +45,7 @@ vim.pack.add({
   -- Status column
   'https://github.com/luukvbaal/statuscol.nvim',
   -- Color scheme
-  'https://github.com/sainnhe/gruvbox-material',
+  'https://github.com/folke/tokyonight.nvim',
   -- Treesitter
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
@@ -318,14 +318,11 @@ require('gitsigns').setup {
   on_attach = require('config.keymaps').gitsigns_on_attach
 }
 
-vim.g.gruvbox_material_enable_italic = true
-vim.g.gruvbox_material_background = 'medium'
-vim.cmd.colorscheme('gruvbox-material')
-vim.api.nvim_set_hl(0, "Whitespace", { fg = "#443E3A" })
+vim.cmd.colorscheme('tokyonight-moon')
 
 -- Neovide config
 if vim.g.neovide then
-  vim.o.guifont = "IosevkaTerm Nerd Font:h10.5"
+  vim.o.guifont = "VictorMono Nerd Font:h12"
   vim.g.neovide_hide_mouse_when_typing = true
   vim.g.neovide_position_animation_length = 0
   vim.g.neovide_cursor_animation_length = 0.00
