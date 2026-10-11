@@ -14,8 +14,8 @@ elseif OS_INFO.darwin then
   -- TODO -- mac
 end
 
--- Notify via RPC when we gain or lose focus
--- Also, notify that we have focus when getting an F24 press, used to query on new nvim instance connect
+-- Send a response over RPC when getting a special key combo
+-- Used to identify nvim instance when running in WSL
 vim.keymap.set("", "<C-M-S-F12>", function ()
   vim.rpcnotify(0, "ack")
 end)
