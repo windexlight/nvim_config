@@ -17,6 +17,7 @@ end
 -- Send a response over RPC when getting a special key combo
 -- Used to identify nvim instance when running in WSL
 vim.keymap.set("", "<C-M-S-F12>", function ()
+  print("got combo!")
   vim.rpcnotify(0, "ack")
 end)
 vim.api.nvim_create_autocmd("FocusGained", {
