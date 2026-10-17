@@ -3,21 +3,15 @@ local uv = vim.uv or vim.loop
 
 local WSL_RUN = '/run/WSL'
 
--- TODO - why is this so complicated to apparently do nothing but read a file?
 local function slurp(path)
-  local fd = uv.fs_open(path, 'r', 438)
-  if not fd then return nil end
-  local chunks = {}
-  while true do
-    local d = uv.fs_read(fd, 65536, -1)
-    if not d or #d == 0 then break end
-    chunks[#chunks + 1] = d
-  end
-  uv.fs_close(fd)
-  return table.concat(chunks)
+  local f = io.open(path, 'rb')
+  if not f then return nil end
+  local s = f:read('*a')
+  f:close()
+  return s
 end
 
-function M.ppid(pid)
+local function get_ppid(pid)
   local s = slurp(('/proc/%d/stat'):format(pid))
   if not s then return nil end
   local _, rest = s:match('^%d+ %((.*)%) (.*)$')
@@ -26,7 +20,7 @@ function M.ppid(pid)
   return tonumber(f[2])
 end
 
-function M.relay_of(pid)
+local function relay_of(pid)
   local cur = pid
   for _ = 1, 128 do
     local sock = ('%s/%d_interop'):format(WSL_RUN, cur)
@@ -38,7 +32,7 @@ function M.relay_of(pid)
         return { pid = cur, interop = sock }
       end
     end
-    local ppid = M.ppid(cur)
+    local ppid = get_ppid(cur)
     if not ppid or ppid <= 1 then return nil end
     cur = ppid
   end
@@ -63,9 +57,10 @@ ConvertTo-Json -Compress -InputObject @($chain)
 
 function M.ancestry()
   local pid = uv.os_getpid()
-  local relay = M.relay_of(pid)
-  local ancestry
+  local relay = relay_of(pid)
+  local ancestry = { no_relay = true }
   if relay then
+    ancestry = { have_relay = true }
     local ps = vim.fn.exepath('powershell.exe')
     if ps == '' then ps = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe' end
     vim.system({ ps, '-NoLogo', '-NoProfile', '-NonInteractive', '-Command', PS_SCRIPT }, {
@@ -77,7 +72,7 @@ function M.ancestry()
         local ok
         ok, ancestry = pcall(vim.json.decode, res.stdout or '')
         if not (ok and type(ancestry) == 'table') then
-          ancestry = nil
+          ancestry = { not_ok = true }
         end
       end
     end)
