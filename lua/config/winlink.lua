@@ -58,9 +58,8 @@ ConvertTo-Json -Compress -InputObject @($chain)
 function M.ancestry()
   local pid = uv.os_getpid()
   local relay = relay_of(pid)
-  local ancestry = { no_relay = true }
+  local ancestry
   if relay then
-    ancestry = { have_relay = true }
     local ps = vim.fn.exepath('powershell.exe')
     if ps == '' then ps = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe' end
     vim.system({ ps, '-NoLogo', '-NoProfile', '-NonInteractive', '-Command', PS_SCRIPT }, {
@@ -75,7 +74,7 @@ function M.ancestry()
           ancestry = { not_ok = true }
         end
       end
-    end)
+    end):wait()
   end
   return ancestry
 end

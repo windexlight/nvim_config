@@ -14,23 +14,6 @@ elseif OS_INFO.darwin then
   -- TODO -- mac
 end
 
--- Send a response over RPC when getting a special key combo
--- Used to identify nvim instance when running in WSL
-vim.keymap.set("", "<C-M-S-F12>", function ()
-  print("got combo!")
-  vim.rpcnotify(0, "ack")
-end)
-vim.api.nvim_create_autocmd("FocusGained", {
-  callback = function()
-    vim.rpcnotify(0, "focus_change", "gain")
-  end,
-})
-vim.api.nvim_create_autocmd("FocusLost", {
-  callback = function()
-    vim.rpcnotify(0, "focus_change", "lose")
-  end,
-})
-
 -- Notify via RPC when mode changes
 local function commit_mode()
   pending = false
