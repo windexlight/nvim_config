@@ -108,17 +108,7 @@ require('fzf-lua').register_ui_select()
 -- require('mini.completion').setup {}
 local cmp = require('blink.cmp')
 cmp.build():pwait()
-cmp.setup {
-  completion = {
-    ghost_text = {
-      enabled = true,
-      show_with_menu = false,
-    },
-    menu = {
-      auto_show = false, -- only show menu on manual <C-space>
-    },
-  }
-}
+cmp.setup {}
 require('quicker').setup {}
 require('mini.files').setup {
   mappings = {
