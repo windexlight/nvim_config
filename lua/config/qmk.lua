@@ -14,13 +14,22 @@ elseif OS_INFO.darwin then
   -- TODO -- mac
 end
 
+local function notify_mode_changed(mode)
+  for _, chan in ipairs(vim.api.nvim_list_chans()) do
+    if chan.client and chan.client.name == "qmk-host-app" then
+      vim.rpcnotify(chan.id, "mode_change", mode)
+      break
+    end
+  end
+end
+
 -- Notify via RPC when mode changes
 local function commit_mode()
   pending = false
   local mode = vim.api.nvim_get_mode().mode
   if mode ~= last_notified_mode then
     last_notified_mode = mode
-    vim.rpcnotify(0, "mode_change", mode)
+    notify_mode_changed(mode)
   end
 end
 
@@ -64,11 +73,11 @@ local waiting_for_char = false
 local f_wrapper_armed = false
 vim.on_key(function(key)
   if f_wrapper_armed then
-    vim.rpcnotify(0, "mode_change", "i")
+    notify_mode_changed("i")
     waiting_for_char = true
     f_wrapper_armed = false
   elseif waiting_for_char then
-    vim.rpcnotify(0, "mode_change", "n")
+    notify_mode_changed("n")
     waiting_for_char = false
   end
 end, ns)
