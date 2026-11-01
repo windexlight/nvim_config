@@ -96,6 +96,19 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Relative line numbers in telescope results list
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "TelescopeResults",
+  callback = function(args)
+    vim.schedule(function()
+      for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
+        vim.wo[win].number = true
+        vim.wo[win].relativenumber = true
+      end
+    end)
+  end,
+})
+
 -- Relative line numbers in mini.files
 vim.api.nvim_create_autocmd("User", {
     pattern = { "MiniFilesWindowOpen", "MiniFilesWindowUpdate" },

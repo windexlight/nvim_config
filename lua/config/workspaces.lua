@@ -1,53 +1,72 @@
 local workspaces = require("workspaces")
-local fzf = require("fzf-lua")
+local pickers = require("telescope.pickers")
+local finders = require("telescope.finders")
+local conf = require("telescope.config").values
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
 
-M = {}
+local M = {}
 
--- TODO - Why does this randomly take 3-4 seconds to populate? Tried a few things, including passing list in a file, but didn't help.
-M.open_workspace_fzf = function ()
-  local list = workspaces.get()
-  local entries = {}
-  for _, item in ipairs(list) do
-    table.insert(entries, string.format("%-20s %s", item.name, item.path))
+local function make_finder()
+  local results = {}
+  for _, item in ipairs(workspaces.get()) do
+    table.insert(results, { name = item.name, path = item.path })
   end
 
-  fzf.fzf_exec(entries, {
-    prompt = "Workspaces> ",
-    fzf_opts = {
-      ["--header"] = "ctrl-a: Add CWD | ctrl-d: Delete selected",
-    },
-    actions = {
-      -- Default (Enter): Open selected workspace
-      ["default"] = function(selected)
-        if not selected or #selected == 0 then return end
-        local name = selected[1]:match("^(%S+)")
-        if name then
-          workspaces.open(name)
-        end
-      end,
-
-      -- Ctrl-a: Add current working directory as a new workspace
-      ["ctrl-a"] = function()
-        vim.ui.input({ prompt = "Workspace name for current directory: " }, function(name)
-          if name and name ~= "" then
-            workspaces.add(vim.fn.getcwd(), name)
-            print("Workspace added: " .. name, vim.log.levels.INFO)
-          end
-        end)
-      end,
-
-      -- Ctrl-d: Remove selected workspace
-      ["ctrl-d"] = function(selected)
-        if not selected or #selected == 0 then return end
-        local name = selected[1]:match("^(%S+)")
-        if name then
-          workspaces.remove(name)
-          print("Workspace removed: " .. name, vim.log.levels.WARN)
-        end
-      end,
-    },
+  return finders.new_table({
+    results = results,
+    entry_maker = function(item)
+      return {
+        value = item,
+        display = string.format("%-20s %s", item.name, item.path),
+        ordinal = item.name .. " " .. item.path,
+      }
+    end,
   })
 end
 
-return M
+M.workspace_picker = function(opts)
+  opts = opts or {}
 
+  pickers
+    .new(opts, {
+      prompt_title = "Workspaces  (<C-a>: Add CWD | <C-d>: Delete selected)",
+      finder = make_finder(),
+      sorter = conf.generic_sorter(opts),
+      attach_mappings = function(prompt_bufnr, map)
+        actions.select_default:replace(function()
+          local entry = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          if entry then
+            workspaces.open(entry.value.name)
+          end
+        end)
+
+        map({ "i", "n" }, "<C-a>", function()
+          actions.close(prompt_bufnr)
+          vim.ui.input({ prompt = "Workspace name for current directory: " }, function(name)
+            if name and name ~= "" then
+              workspaces.add(vim.fn.getcwd(), name)
+              vim.notify("Workspace added: " .. name, vim.log.levels.INFO)
+            end
+          end)
+        end)
+
+        map({ "i", "n" }, "<C-d>", function()
+          local entry = action_state.get_selected_entry()
+          if not entry then
+            return
+          end
+          local picker = action_state.get_current_picker(prompt_bufnr)
+          workspaces.remove(entry.value.name)
+          vim.notify("Workspace removed: " .. entry.value.name, vim.log.levels.WARN)
+          picker:refresh(make_finder(), { reset_prompt = false })
+        end)
+
+        return true
+      end,
+    })
+    :find()
+end
+
+return M

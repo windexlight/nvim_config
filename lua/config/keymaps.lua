@@ -170,40 +170,29 @@ map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Code Rename" })
 map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
 -- map("n", "<leader>gth", vim.lsp.buf.typehierarchy, { desc = "Show Type Heirarchy" })
 
--- FzfLua
-map("n", "gd", function() FzfLua.lsp_definitions() end, { desc = "Goto Definition" }) -- Native "go to definition of word under the cursor in current function"
-map("n", "gr", function() FzfLua.lsp_references() end, { desc = "Goto References" }) -- Native "virtual replace N chars with {char}"
-map("n", "gds", function() FzfLua.lsp_document_symbols() end, { desc = "Goto Document Symbols" }) -- No native
-map("n", "gws", function() FzfLua.lsp_workspace_symbols() end, { desc = "Goto Workspace Symbols" }) -- No native
-map("n", "<leader>/", function() FzfLua.live_grep() end, { desc = "Live Grep" }) -- No native
-map("n", "<leader>fo", function() FzfLua.oldfiles() end, { desc = "Goto Oldfiles" }) -- No native
-map("n", "<leader>fb", function() FzfLua.buffers() end, { desc = "Goto Buffers" }) -- No native
-map("n", "<leader>ff", function() FzfLua.files() end, { desc = "Goto Files" }) -- No native
-map("n", "<leader>ft", function() FzfLua.tabs() end, { desc = "Goto Tabs" }) -- No native
-map("n", "<leader>fl", function() FzfLua.lines() end, { desc = "Goto Lines" }) -- No native
-map("n", "<leader>fj", function() FzfLua.jumps() end, { desc = "FzfLua Jumps" }) -- No native
-map("n", "<leader>fr", function() FzfLua.resume() end, { desc = "FzfLua Resume" }) -- No native
-map("n", "gm", function() FzfLua.marks() end, { desc = "Goto Marks" }) -- No native
-
--- TODO: add other fzf-lua keymaps
-
--- Others:
---Command	List
--- lsp_declarations	Declarations
--- lsp_typedefs	Type Definitions
--- lsp_implementations	Implementations
--- lsp_live_workspace_symbols	Workspace Symbols (live query)
--- lsp_incoming_calls	Incoming Calls
--- lsp_outgoing_calls	Outgoing Calls
--- lsp_type_sub	Sub Types
--- lsp_type_super	Super Types
--- lsp_code_actions	Code Actions
--- lsp_finder	All LSP locations, combined view
--- diagnostics_document	Document Diagnostics
--- diagnostics_workspace	Workspace Diagnostics
--- lsp_document_diagnostics	alias to diagnostics_document
--- lsp_workspace_diagnostics	alias to diagnostics_workspace
-
+-- Telescope
+local builtin = require('telescope.builtin')
+map("n", "gd", builtin.lsp_definitions, { desc = "Goto Definition" })
+map("n", "gr", builtin.lsp_references, { desc = "Goto References" })
+map("n", "gds", builtin.lsp_document_symbols, { desc = "Goto Document Symbols" })
+map("n", "gws", builtin.lsp_workspace_symbols, { desc = "Goto Workspace Symbols" })
+map("n", "<leader>/", builtin.live_grep, { desc = "Live Grep" })
+-- map("n", "<leader>fo", builtin.oldfiles, { desc = "Goto Oldfiles" })
+vim.keymap.set("n", "<leader>fo", function()
+  require("telescope").extensions.frecency.frecency({
+    workspace = "CWD",
+    prompt_title = "Frecency",
+  })
+end, { desc = "Frecency" })
+map("n", "<leader>fb", builtin.buffers, { desc = "Goto Buffers" })
+map("n", "<leader>ff", builtin.find_files, { desc = "Goto Files" })
+map("n", "<leader>ft", function()
+  require('telescope').extensions['telescope-tabs'].list_tabs()
+end, { desc = "Goto Tabs" })
+map("n", "<leader>fl", builtin.current_buffer_fuzzy_find, { desc = "Goto Buffer Lines" })
+map("n", "<leader>fj", builtin.jumplist, { desc = "Telescope Jumps" })
+map("n", "<leader>fr", builtin.resume, { desc = "Telescope Resume" })
+map("n", "gm", builtin.marks, { desc = "Goto Marks" })
 
 -- CD to LSP root
 local function cd_to_lsp_root(loc)
@@ -277,21 +266,21 @@ map('n', '<Leader>mt', MiniMap.toggle)
 -- Mini.Files
 map("n", "<leader>fm", function() MiniFiles.open() end, { desc = "Lazygit (Root Dir)" })
 
--- Fuzzy cd
-map({"i","n","v"}, "<M-f>d", function()
-  require("fzf-lua").fzf_exec("fd . --type d", { --or fd
-  prompt = "~/",
-  cwd = "~",
-  actions = {
-    ["default"] = function(selected)
-      if selected and #selected > 0 then
-        local root = vim.fn.expand("~").."/"
-        vim.cmd("cd " .. root .. selected[1])
-      end
-    end,
-  },
-})
-end, {silent=true, desc="Fuzzy cd to dir under ~"})
+-- -- Fuzzy cd
+-- map({"i","n","v"}, "<M-f>d", function()
+--   require("fzf-lua").fzf_exec("fd . --type d", { --or fd
+--   prompt = "~/",
+--   cwd = "~",
+--   actions = {
+--     ["default"] = function(selected)
+--       if selected and #selected > 0 then
+--         local root = vim.fn.expand("~").."/"
+--         vim.cmd("cd " .. root .. selected[1])
+--       end
+--     end,
+--   },
+-- })
+-- end, {silent=true, desc="Fuzzy cd to dir under ~"})
 
 -- On MiniFiles creation
 vim.api.nvim_create_autocmd("User", {
@@ -403,8 +392,8 @@ map('n', 'gt', '<cmd>ToggleTerm<cr>')
 map('n', '<leader>or', '<cmd>OverseerRun<cr>')
 map('n', '<leader>ot', '<cmd>OverseerToggle<cr>')
 
--- Workspaces fzf-lua
-map("n", "<leader>fw", require("config.workspaces").open_workspace_fzf, { desc = "Find Workspaces (fzf-lua)" })
+-- Workspace picker
+map("n", "<leader>fw", require("config.workspaces").workspace_picker, { desc = "Find Workspaces" })
 
 -- Open Neogit
 map("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Open Neogit UI" })

@@ -36,8 +36,12 @@ vim.pack.add({
   -- Quickstart configs for LSP
   'https://github.com/neovim/nvim-lspconfig',
   -- Fuzzy picker
-  'https://github.com/ibhagwan/fzf-lua',
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/nvim-telescope/telescope.nvim',
+  'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
+  'https://codeberg.org/LukasPietzschmann/telescope-tabs',
   'https://github.com/kyazdani42/nvim-web-devicons',
+  'https://github.com/nvim-telescope/telescope-frecency.nvim',
   -- Enhanced quickfix/loclist
   'https://github.com/stevearc/quicker.nvim',
   -- Git integration
@@ -81,30 +85,72 @@ vim.pack.add({
   'https://github.com/rafamadriz/friendly-snippets',
 })
 
-require('fzf-lua').setup {
-  fzf_colors = true,
-  defaults = { file_icons = false, git_icons = false },
-  -- files = { file_icons = false, git_icons = false },
-  -- oldfiles = { file_icons = false, git_icons = false },
-  winopts = {
-    split = "botright new",
-    preview = {
-      layout = "flex",
-      vertical = "down:50%",
-      horizontal = "right:50%",
+require("telescope").setup{
+  defaults = require("telescope.themes").get_ivy({
+    border = false,
+    layout_config = { height = 0.5 },
+    get_status_text = function(self)
+      local processed = self.stats.processed or 0
+      local filtered = self.stats.filtered or 0
+      local count = ""
+      if processed > 0 then
+        count = string.format("%d / %d", processed - filtered, processed)
+      end
+      local title = type(self.prompt_title) == "string" and self.prompt_title or ""
+      return vim.trim(title .. "  " .. count)
+    end,
+    path_display = {
+      "filename_first",
+    },
+  }),
+  pickers = {
+    buffers = {
+      sort_lastused = true,
+      mappings = {
+        n = {
+          ["dd"] = require("telescope.actions").delete_buffer,
+        },
+      },
     },
   },
-  grep = {
-    rg_glob_fn = function(query, opts)
-      local search, flags = query:match("^(.-)%s+%-%-%s+(.*)$")
-      if not search then
-        return query, nil
-      end
-      return search, flags
-    end,
-  },
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
+  }
 }
-require('fzf-lua').register_ui_select()
+require('telescope').load_extension('fzf')
+require('telescope').load_extension('telescope-tabs')
+require('telescope').load_extension('frecency')
+
+-- require('fzf-lua').setup {
+--   fzf_colors = true,
+--   defaults = { file_icons = false, git_icons = false },
+--   -- files = { file_icons = false, git_icons = false },
+--   -- oldfiles = { file_icons = false, git_icons = false },
+--   winopts = {
+--     split = "botright new",
+--     preview = {
+--       layout = "flex",
+--       vertical = "down:50%",
+--       horizontal = "right:50%",
+--     },
+--   },
+--   grep = {
+--     rg_glob_fn = function(query, opts)
+--       local search, flags = query:match("^(.-)%s+%-%-%s+(.*)$")
+--       if not search then
+--         return query, nil
+--       end
+--       return search, flags
+--     end,
+--   },
+-- }
+-- require('fzf-lua').register_ui_select()
 -- require('mini.completion').setup {}
 local cmp = require('blink.cmp')
 cmp.build():pwait()
@@ -309,6 +355,8 @@ require('gitsigns').setup {
 }
 
 vim.cmd.colorscheme('tokyonight-moon')
+vim.api.nvim_set_hl(0, "TelescopePromptNormal",  { link = "CursorLine" })
+vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { link = "NormalFloat" })
 
 -- Neovide config
 if vim.g.neovide then

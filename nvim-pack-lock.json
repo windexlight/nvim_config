@@ -16,10 +16,6 @@
       "rev": "b4d01b0fdf3c9a549961c2f9ffe8dc09be166219",
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
-    "fzf-lua": {
-      "rev": "532d463f5c83595192fe740572d8fd6902b2217a",
-      "src": "https://github.com/ibhagwan/fzf-lua"
-    },
     "gitsigns.nvim": {
       "rev": "31d6fb2d618bca1482b9f274751ead5f03461408",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
@@ -100,6 +96,10 @@
       "rev": "a93d9f6d6defdac4bcd6d2c8ba988650e42e0a0e",
       "src": "https://github.com/stevearc/overseer.nvim"
     },
+    "plenary.nvim": {
+      "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
     "quicker.nvim": {
       "rev": "4a6883cb13fe097a20a046eb55f6dffd239276e3",
       "src": "https://github.com/stevearc/quicker.nvim"
@@ -107,6 +107,22 @@
     "statuscol.nvim": {
       "rev": "887b8a03ea3804628505c9002fd07bd06a3db2e0",
       "src": "https://github.com/luukvbaal/statuscol.nvim"
+    },
+    "telescope-frecency.nvim": {
+      "rev": "5479d8a269e30479280c59e44f805396127653e6",
+      "src": "https://github.com/nvim-telescope/telescope-frecency.nvim"
+    },
+    "telescope-fzf-native.nvim": {
+      "rev": "b25b749b9db64d375d782094e2b9dce53ad53a40",
+      "src": "https://github.com/nvim-telescope/telescope-fzf-native.nvim"
+    },
+    "telescope-tabs": {
+      "rev": "777b1f630f3d6a12a2e71635a82581c988d6da2e",
+      "src": "https://codeberg.org/LukasPietzschmann/telescope-tabs"
+    },
+    "telescope.nvim": {
+      "rev": "40aedd8a68c78a656a10a8d62d80c54af59420fb",
+      "src": "https://github.com/nvim-telescope/telescope.nvim"
     },
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
