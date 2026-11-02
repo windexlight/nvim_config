@@ -193,6 +193,13 @@ map("n", "<leader>fl", builtin.current_buffer_fuzzy_find, { desc = "Goto Buffer 
 map("n", "<leader>fj", builtin.jumplist, { desc = "Telescope Jumps" })
 map("n", "<leader>fr", builtin.resume, { desc = "Telescope Resume" })
 map("n", "gm", builtin.marks, { desc = "Goto Marks" })
+map("n", "<leader>ch", builtin.command_history, { desc = "Command History" })
+map("n", "<leader>sh", builtin.search_history, { desc = "Search History" })
+map("n", "<leader>tr", builtin.treesitter, { desc = "Treesitter" })
+map("n", "<leader>rg", builtin.registers, { desc = "Registers" })
+map("n", "<leader>gc", builtin.git_commits, { desc = "Git Commits" })
+map("n", "<leader>gb", builtin.git_branches, { desc = "Git Branches" })
+map("n", "<leader>gs", builtin.git_status, { desc = "Git Status" })
 
 -- CD to LSP root
 local function cd_to_lsp_root(loc)
