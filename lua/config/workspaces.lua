@@ -30,7 +30,7 @@ M.workspace_picker = function(opts)
 
   pickers
     .new(opts, {
-      prompt_title = "Workspaces  (<C-a>: Add CWD | <C-d>: Delete selected)",
+      prompt_title = "Workspaces  (<C-a>: Add CWD | dd: Delete selected)",
       finder = make_finder(),
       sorter = conf.generic_sorter(opts),
       attach_mappings = function(prompt_bufnr, map)
@@ -52,7 +52,7 @@ M.workspace_picker = function(opts)
           end)
         end)
 
-        map({ "i", "n" }, "<C-d>", function()
+        map({ "n" }, "dd", function()
           local entry = action_state.get_selected_entry()
           if not entry then
             return
