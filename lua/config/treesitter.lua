@@ -2,7 +2,7 @@ require('nvim-treesitter').setup {}
 require('nvim-treesitter').install { 'rust', 'python' }
 
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "python", "rust", },
+    pattern = { "python", "rust", "c", },
     callback = function()
         vim.treesitter.start()
     end,
