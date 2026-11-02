@@ -355,8 +355,6 @@ require('gitsigns').setup {
 }
 
 vim.cmd.colorscheme('tokyonight-moon')
-vim.api.nvim_set_hl(0, "TelescopePromptNormal",  { link = "CursorLine" })
-vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { link = "NormalFloat" })
 
 -- Neovide config
 if vim.g.neovide then

@@ -180,7 +180,6 @@ map("n", "<leader>/", builtin.live_grep, { desc = "Live Grep" })
 -- map("n", "<leader>fo", builtin.oldfiles, { desc = "Goto Oldfiles" })
 vim.keymap.set("n", "<leader>fo", function()
   require("telescope").extensions.frecency.frecency({
-    workspace = "CWD",
     prompt_title = "Frecency",
   })
 end, { desc = "Frecency" })
@@ -198,8 +197,10 @@ map("n", "<leader>sh", builtin.search_history, { desc = "Search History" })
 map("n", "<leader>tr", builtin.treesitter, { desc = "Treesitter" })
 map("n", "<leader>rg", builtin.registers, { desc = "Registers" })
 map("n", "<leader>gc", builtin.git_commits, { desc = "Git Commits" })
+map("n", "<leader>bc", builtin.git_bcommits, { desc = "Git Buffer Commits" })
 map("n", "<leader>gb", builtin.git_branches, { desc = "Git Branches" })
 map("n", "<leader>gs", builtin.git_status, { desc = "Git Status" })
+map("n", "<leader>di", builtin.diagnostics, { desc = "Diagnostics" })
 
 -- CD to LSP root
 local function cd_to_lsp_root(loc)

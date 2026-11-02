@@ -104,6 +104,9 @@ vim.api.nvim_create_autocmd("FileType", {
       for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
         vim.wo[win].number = true
         vim.wo[win].relativenumber = true
+        vim.wo[win].statuscolumn = vim.go.statuscolumn
+        vim.wo[win].cursorline = true
+        vim.wo[win].cursorlineopt = "number"
       end
     end)
   end,
@@ -133,3 +136,26 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Darken background of Telescope preview window
+local function shade(color, factor)
+  local r = math.floor(color / 65536) % 256
+  local g = math.floor(color / 256) % 256
+  local b = color % 256
+  return math.floor(r * factor) * 65536
+       + math.floor(g * factor) * 256
+       + math.floor(b * factor)
+end
+
+local function set_telescope_preview_hl()
+  local normal = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
+  if not normal.bg then
+    vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { link = "NormalFloat" })
+    return
+  end
+  vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = shade(normal.bg, 0.8) })
+end
+
+set_telescope_preview_hl()
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = set_telescope_preview_hl,
+})
