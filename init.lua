@@ -271,6 +271,20 @@ require('grug-far').setup {}
 require('neogit').setup {
   disable_line_numbers = false,
   disable_relative_line_numbers = false,
+  mappings = {
+    status = {
+      -- Disable number keys so they work as Vim jump counts
+      ["1"] = false,
+      ["2"] = false,
+      ["3"] = false,
+      ["4"] = false,
+      ["5"] = false,
+      ["6"] = false,
+      ["7"] = false,
+      ["8"] = false,
+      ["9"] = false,
+    },
+  },
 }
 require("diffview").setup {
   keymaps = {
