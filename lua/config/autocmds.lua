@@ -159,3 +159,34 @@ set_telescope_preview_hl()
 vim.api.nvim_create_autocmd("ColorScheme", {
   callback = set_telescope_preview_hl,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "NeogitLogView", "NeogitCommitView", "NeogitStatus" },
+  callback = function()
+    local opts = { buffer = true, silent = true, desc = "Diffview open commit..HEAD --imply-local" }
+    vim.keymap.set("n", "<leader>d", function()
+      local line = vim.api.nvim_get_current_line()
+      local commit = line:match("(%x%x%x%x%x%x%x%x*)")
+      if not commit or #commit < 7 then
+        vim.notify("No commit hash found on the current line", vim.log.levels.WARN)
+        return
+      end
+      vim.cmd(string.format("DiffviewOpen %s..HEAD --imply-local", commit))
+    end, opts)
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "NeogitLogView",
+  callback = function(args)
+    vim.schedule(function()
+      for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
+        vim.wo[win].number = true
+        vim.wo[win].relativenumber = true
+        -- vim.wo[win].statuscolumn = vim.go.statuscolumn
+        -- vim.wo[win].cursorline = true
+        -- vim.wo[win].cursorlineopt = "number"
+      end
+    end)
+  end,
+})
