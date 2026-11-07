@@ -9,6 +9,8 @@ vim.api.nvim_create_autocmd('UIEnter', {
   end,
 })
 
+vim.o.fileformats = "unix,dos" -- Default to LF line endings
+vim.o.fileformat = "unix" -- Default to LF line endings
 opt.number = true -- Print line number
 opt.relativenumber = true -- Relative line numbers
 opt.cursorline = true -- Enable highlighting of the current line
