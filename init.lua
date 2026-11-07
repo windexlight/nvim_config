@@ -292,6 +292,11 @@ require('neogit').setup {
   },
 }
 require("diffview").setup {
+  view = {
+    default = {
+      layout = "diff1_inline",
+    },
+  },
   keymaps = {
     view = {
       { "n", "q", "<cmd>DiffviewClose<CR>", { desc = "Close Diffview" } },
