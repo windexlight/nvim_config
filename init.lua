@@ -87,6 +87,11 @@ vim.pack.add({
 
 require("telescope").setup{
   defaults = require("telescope.themes").get_ivy({
+    mappings = {
+      n = {
+        ["q"] = require('telescope.actions').close,
+      },
+    },
     border = false,
     layout_config = { height = 0.5 },
     get_status_text = function(self)
