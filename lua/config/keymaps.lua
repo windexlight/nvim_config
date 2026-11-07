@@ -265,6 +265,33 @@ map({ "n", "x", "o" }, "[M", function() require("nvim-treesitter-textobjects.mov
 -- end)
 --
 
+-- Toggle diffview open/close
+map('n', '<leader>dv', '<cmd>DiffviewToggle<cr>', { desc = 'Toggle Diffview' })
+
+-- Diff working directory
+map('n', '<leader>do', '<cmd>DiffviewOpen<cr>', { desc = 'Diffview open' })
+map('n', '<leader>dc', '<cmd>DiffviewClose<cr>', { desc = 'Diffview close' })
+
+-- File history
+map('n', '<leader>dh', '<cmd>DiffviewFileHistory %<cr>', { desc = 'File history (current file)' })
+map('n', '<leader>dH', '<cmd>DiffviewFileHistory<cr>', { desc = 'File history (repo)' })
+
+-- Visual mode: history for selection
+map('v', '<leader>dh', "<Esc><cmd>'<,'>DiffviewFileHistory --follow<CR>", { desc = 'Range history' })
+
+-- Single line history
+map('n', '<leader>dl', '<cmd>.DiffviewFileHistory --follow<CR>', { desc = 'Line history' })
+
+-- Diff against main/master branch (useful before merging)
+map('n', '<leader>dm', function()
+
+  -- Try main first, fall back to master
+  local result = vim.fn.systemlist({ 'git', 'rev-parse', '--verify', 'main' })
+  local ok = vim.v.shell_error == 0 and result[1] ~= nil and result[1] ~= ''
+  local branch = ok and 'main' or 'master'
+  vim.cmd('DiffviewOpen ' .. branch)
+end, { desc = 'Diff against main/master' })
+
 -- Mini.Map
 map('n', '<Leader>mc', MiniMap.close)
 map('n', '<Leader>mf', MiniMap.toggle_focus)
