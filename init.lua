@@ -295,7 +295,15 @@ require("diffview").setup {
   view = {
     default = {
       layout = "diff1_inline",
+      focus_diff = true,
     },
+    foldlevel = 99,
+    cycle_layouts = {
+      default = { "diff1_inline", "diff2_horizontal" },
+    },
+  },
+  file_panel = {
+    listing_style = "list",
   },
   keymaps = {
     view = {
