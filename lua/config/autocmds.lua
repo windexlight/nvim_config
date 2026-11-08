@@ -31,6 +31,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- Auto create dir when saving a file
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   callback = function(event)
+    local filename = vim.fs.normalize(vim.api.nvim_buf_get_name(event.buf))
+    if filename == "" or filename:match("^%w+:") then
+      return
+    end
     local file = vim.uv.fs_realpath(event.match) or event.match
     vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
   end,
