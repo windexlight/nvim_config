@@ -292,9 +292,11 @@ require('neogit').setup {
   },
 }
 require("diffview").setup {
+  enhanced_diff_hl = true,
+  diffopt = { algorithm = "histogram" },
   view = {
     default = {
-      layout = "diff1_inline",
+      layout = "diff2_horizontal",
       focus_diff = true,
     },
     foldlevel = 99,
@@ -304,6 +306,11 @@ require("diffview").setup {
   },
   file_panel = {
     listing_style = "list",
+    win_config = {
+      type = "split",
+      position = "bottom",
+      height = 8,
+    }
   },
   keymaps = {
     view = {
