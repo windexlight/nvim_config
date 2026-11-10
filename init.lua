@@ -121,6 +121,7 @@ require("telescope").setup{
       mappings = {
         n = {
           ["<cr>"] = false,
+          ["<tab>"] = require("telescope.actions").git_checkout,
         },
       },
     },
