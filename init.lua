@@ -117,6 +117,13 @@ require("telescope").setup{
         },
       },
     },
+    git_commits = {
+      mappings = {
+        n = {
+          ["<cr>"] = false,
+        },
+      },
+    },
   },
   extensions = {
     fzf = {
