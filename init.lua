@@ -121,7 +121,9 @@ require("telescope").setup{
       mappings = {
         n = {
           ["<cr>"] = false,
-          ["<tab>"] = require("telescope.actions").git_checkout,
+          ["cc"] = require("telescope.actions").git_checkout,
+          ["dd"] = require("config.telescope").diffview_commit,
+          ["dh"] = require("config.telescope").diffview_head,
         },
       },
     },
