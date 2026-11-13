@@ -123,7 +123,12 @@ require("telescope").setup{
           ["<cr>"] = false,
           ["cc"] = require("telescope.actions").git_checkout,
           ["dd"] = require("config.telescope").diffview_commit,
-          ["dh"] = require("config.telescope").diffview_head,
+          ["dc"] = require("config.telescope").diffview_head,
+        },
+        i = {
+          ["<c-j><c-j>"] = require("telescope.actions").git_checkout,
+          ["<c-r><c-r>"] = require("config.telescope").diffview_commit,
+          ["<c-r><c-j>"] = require("config.telescope").diffview_head,
         },
       },
     },
