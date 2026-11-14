@@ -183,7 +183,7 @@ vim.keymap.set("n", "<leader>fo", function()
     prompt_title = "Frecency",
   })
 end, { desc = "Frecency" })
-map("n", "<leader>fj", function() builtin.buffers({initial_mode = "normal", sort_mru = true, entry_maker = require("config.telescope").buffers_entry_maker()}) end, { desc = "Goto Buffers" })
+map("n", "<leader>fj", function() builtin.buffers({sort_mru = true, entry_maker = require("config.telescope").buffers_entry_maker()}) end, { desc = "Goto Buffers" })
 map("n", "<leader>ff", builtin.find_files, { desc = "Goto Files" })
 map("n", "<leader>gf", builtin.git_files, { desc = "Git Files" })
 map("n", "<leader>ft", function()
