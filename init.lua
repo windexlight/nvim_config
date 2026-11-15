@@ -114,7 +114,7 @@ require("telescope").setup{
       -- select_current = true,
       ignore_current_buffer = true,
       sort_mru = true,
-      -- entry_maker = require("config.telescope").buffers_entry_maker(),
+      entry_maker = require("config.telescope").buffers_entry_maker(),
       mappings = {
         n = {
           ["dd"] = require("telescope.actions").delete_buffer,

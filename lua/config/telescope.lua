@@ -40,29 +40,6 @@ local function is_uri(path)
   return utils.is_uri(path)
 end
 
---- plenary relativizes a path by comparing it with the cwd as plain text,
---- sensitive to both separators and case. On Windows a buffer name often
---- doesn't spell the cwd the same way (`C:/proj` with 'shellslash' vs. the
---- `C:\proj` libuv reports, or a different drive-letter/directory case), so
---- the comparison fails and the path stays absolute. Respell the name to match
---- the cwd and plenary's own relativizing, and its `~` home substitution,
---- work as intended.
----@param name string  buffer name as reported by Neovim
----@param cwd string   cwd, already normalized by `get_cwd`
-local function respell_for_plenary(name, cwd)
-  if not IS_WIN or not name:match "^%a:[/\\]" then
-    return name -- not a Windows drive path (empty, URI, UNC, ...)
-  end
-  name = name:gsub("/", "\\")
-  local prefix = cwd:sub(-1) == "\\" and cwd or (cwd .. "\\")
-  if name:sub(1, #prefix):lower() == prefix:lower() then
-    return prefix .. name:sub(#prefix + 1)
-  elseif name:lower() == cwd:lower() then
-    return cwd
-  end
-  return name
-end
-
 --- Split a path into its filename and the directory part.
 ---@param path string
 ---@param reverse_directories boolean
@@ -135,25 +112,14 @@ function M.buffers_entry_maker(opts)
     icon_width = strings.strdisplaywidth(icon)
   end
 
-  -- The cwd as telescope would use it, with the separator plenary expects.
-  local function get_cwd()
-    local cwd = utils.path_expand(opts.cwd or vim.uv.cwd())
-    if IS_WIN then
-      cwd = cwd:gsub("/", "\\")
-      if not cwd:match "^%a:\\$" then
-        cwd = cwd:gsub("\\+$", "") -- keep the trailing `\` only on a drive root
-      end
-    end
-    return cwd
-  end
-
   -- `gen_from_buffer` captures the cwd when it is created. Because this
   -- entry_maker can outlive a single picker (e.g. set in `setup()`), rebuild
   -- the wrapped maker whenever the cwd changes so paths stay relative to it.
   local default_maker, default_maker_cwd
-  local function get_default_maker(cwd)
+  local function get_default_maker()
+    local cwd = opts.cwd or vim.uv.cwd()
     if cwd ~= default_maker_cwd then
-      default_maker = make_entry.gen_from_buffer(vim.tbl_extend("force", opts, { cwd = cwd }))
+      default_maker = make_entry.gen_from_buffer(opts)
       default_maker_cwd = cwd
     end
     return default_maker
@@ -213,14 +179,7 @@ function M.buffers_entry_maker(opts)
   end
 
   return function(buffer)
-    local cwd = get_cwd()
-    if IS_WIN and buffer.info and buffer.info.name then
-      -- Copy, don't mutate: telescope reuses these buffer tables (e.g. on resume).
-      local info = vim.tbl_extend("force", buffer.info, { name = respell_for_plenary(buffer.info.name, cwd) })
-      buffer = vim.tbl_extend("force", buffer, { info = info })
-    end
-
-    local entry = get_default_maker(cwd)(buffer)
+    local entry = get_default_maker()(buffer)
     entry.display = make_display
     return entry
   end
