@@ -49,7 +49,7 @@ vim.pack.add({
   -- Status column
   'https://github.com/luukvbaal/statuscol.nvim',
   -- Color scheme
-  'https://github.com/folke/tokyonight.nvim',
+  { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
   -- Treesitter
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
@@ -408,11 +408,11 @@ require('gitsigns').setup {
   on_attach = require('config.keymaps').gitsigns_on_attach
 }
 
-vim.cmd.colorscheme('tokyonight-moon')
+vim.cmd.colorscheme('catppuccin-macchiato')
 
 -- Neovide config
 if vim.g.neovide then
-  vim.o.guifont = "VictorMono Nerd Font:h12"
+  vim.o.guifont = "IosevkaTerm Nerd Font:h12"
   vim.g.neovide_hide_mouse_when_typing = true
   vim.g.neovide_position_animation_length = 0
   vim.g.neovide_cursor_animation_length = 0.00
