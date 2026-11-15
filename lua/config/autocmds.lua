@@ -181,7 +181,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "NeogitLogView",
+  pattern = { "NeogitLogView", "NeogitReflogView" },
   callback = function(args)
     vim.schedule(function()
       for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
