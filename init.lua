@@ -110,7 +110,10 @@ require("telescope").setup{
   }),
   pickers = {
     buffers = {
-      sort_lastused = true,
+      -- sort_lastused = true,
+      -- select_current = true,
+      sort_mru = true,
+      entry_maker = require("config.telescope").buffers_entry_maker(),
       mappings = {
         n = {
           ["dd"] = require("telescope.actions").delete_buffer,
