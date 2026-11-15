@@ -112,6 +112,7 @@ require("telescope").setup{
     buffers = {
       -- sort_lastused = true,
       -- select_current = true,
+      ignore_current_buffer = true,
       sort_mru = true,
       entry_maker = require("config.telescope").buffers_entry_maker(),
       mappings = {
