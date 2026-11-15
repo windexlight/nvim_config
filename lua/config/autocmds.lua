@@ -165,7 +165,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "NeogitLogView", "NeogitCommitView", "NeogitStatus" },
+  pattern = { "NeogitLogView", "NeogitCommitView", "NeogitStatus", "NeogitReflogView" },
   callback = function()
     local opts = { buffer = true, silent = true, desc = "Diffview open commit..HEAD --imply-local" }
     vim.keymap.set("n", "<leader>d", function()
