@@ -294,6 +294,9 @@ require('grug-far').setup {}
 require('neogit').setup {
   disable_line_numbers = false,
   disable_relative_line_numbers = false,
+  commit_editor = {
+    staged_diff_split_kind = "vsplit",
+  },
   mappings = {
     status = {
       -- Disable number keys so they work as Vim jump counts
