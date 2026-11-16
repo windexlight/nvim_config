@@ -85,6 +85,17 @@ vim.pack.add({
   'https://github.com/rafamadriz/friendly-snippets',
 })
 
+local orig_gen_from_buffer = require("telescope.make_entry").gen_from_buffer
+require("telescope.make_entry").gen_from_buffer = function(opts)
+  local default_entry_maker = orig_gen_from_buffer(opts)
+  return function(entry)
+    -- if entry.info.name ~= "" and entry.info.name then
+    --   entry.info.name = entry.info.name:gsub("/", "\\")
+    -- end
+    return default_entry_maker(entry)
+  end
+end
+
 require("telescope").setup{
   defaults = require("telescope.themes").get_ivy({
     mappings = {
@@ -114,7 +125,7 @@ require("telescope").setup{
       -- select_current = true,
       ignore_current_buffer = true,
       sort_mru = true,
-      entry_maker = require("config.telescope").buffers_entry_maker(),
+      -- entry_maker = require("config.telescope").buffers_entry_maker(),
       mappings = {
         n = {
           ["dd"] = require("telescope.actions").delete_buffer,
