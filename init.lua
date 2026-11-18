@@ -88,11 +88,16 @@ vim.pack.add({
 local orig_gen_from_buffer = require("telescope.make_entry").gen_from_buffer
 require("telescope.make_entry").gen_from_buffer = function(opts)
   local default_entry_maker = orig_gen_from_buffer(opts)
-  return function(entry)
-    -- if entry.info.name ~= "" and entry.info.name then
-    --   entry.info.name = entry.info.name:gsub("/", "\\")
-    -- end
-    return default_entry_maker(entry)
+  return function(entry_in)
+    local entry_out = default_entry_maker(entry_in)
+    local orig_display = entry_out.display
+    entry_out.display = function(entry)
+      if entry.filename ~= "" and entry.filename then
+        entry.filename = entry.filename:gsub("/", "\\")
+      end
+      return orig_display(entry)
+    end
+    return entry_out
   end
 end
 
