@@ -295,22 +295,6 @@ end, { desc = 'Diff against main/master' })
 -- Mini.Files
 map("n", "<leader>fm", function() MiniFiles.open() end, { desc = "Lazygit (Root Dir)" })
 
--- -- Fuzzy cd
--- map({"i","n","v"}, "<M-f>d", function()
---   require("fzf-lua").fzf_exec("fd . --type d", { --or fd
---   prompt = "~/",
---   cwd = "~",
---   actions = {
---     ["default"] = function(selected)
---       if selected and #selected > 0 then
---         local root = vim.fn.expand("~").."/"
---         vim.cmd("cd " .. root .. selected[1])
---       end
---     end,
---   },
--- })
--- end, {silent=true, desc="Fuzzy cd to dir under ~"})
-
 -- On MiniFiles creation
 vim.api.nvim_create_autocmd("User", {
   pattern = "MiniFilesBufferCreate",
