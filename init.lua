@@ -65,7 +65,6 @@ vim.pack.add({
   'https://github.com/nvim-mini/mini.bufremove',
   'https://github.com/nvim-mini/mini.trailspace',
   -- 'https://github.com/nvim-mini/mini.cursorword',
-  'https://github.com/nvim-mini/mini.map',
   'https://github.com/nvim-mini/mini.indentscope',
   -- Grug-Far
   'https://github.com/MagicDuck/grug-far.nvim',
@@ -213,14 +212,6 @@ indentscope.setup {
   },
   symbol = '│',
 }
-local map = require('mini.map')
-map.setup({
-  integrations = {
-    map.gen_integration.builtin_search(),
-    map.gen_integration.gitsigns(),
-    map.gen_integration.diagnostic(),
-  },
-})
 local spec_treesitter = require('mini.ai').gen_spec.treesitter
 require('mini.ai').setup {
   n_lines = 500,
