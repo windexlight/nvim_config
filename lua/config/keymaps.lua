@@ -13,10 +13,10 @@ map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
 -- Remap multicursor
-map({'n', 'x'}, 'M', 'Q')
+map({'n', 'x'}, '<c-m>', 'Q')
 
 -- Clear multicursors
-map({'n'}, '<leader>M', function ()
+map({'n'}, '<leader>m', function ()
   local mc_ns = vim.api.nvim_create_namespace('nvim.multicursor')
   vim.api.nvim_buf_clear_namespace(0, mc_ns, 0, -1)
 end)
