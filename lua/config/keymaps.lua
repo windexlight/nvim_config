@@ -45,6 +45,7 @@ local telescope_fts = {
   TelescopePrompt = true,
   TelescopeResults = true,
   TelescopePreviewer = true,
+  minifiles = true,
 }
 map({ "i", "n", "s" }, "<esc>", function()
   if not telescope_fts[vim.bo.filetype] then
