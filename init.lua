@@ -40,7 +40,7 @@ vim.pack.add({
   'https://github.com/nvim-telescope/telescope.nvim',
   'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
   'https://codeberg.org/LukasPietzschmann/telescope-tabs',
-  'https://github.com/kyazdani42/nvim-web-devicons',
+  'https://github.com/nvim-tree/nvim-web-devicons',
   'https://github.com/nvim-telescope/telescope-frecency.nvim',
   -- Enhanced quickfix/loclist
   'https://github.com/stevearc/quicker.nvim',
