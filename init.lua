@@ -87,6 +87,24 @@ vim.pack.add({
 })
 
 require('lualine').setup {
+  options = {
+    globalstatus = true,
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {
+        "neo-tree",
+        "NvimTree",
+        "qf",
+        "toggleterm",
+        "help",
+        "DiffviewFiles",
+        "NeogitStatus",
+        "NeogitLogView",
+        "NeogitDiffView",
+        "gitcommit",
+      },
+    },
+  },
   winbar = {
     lualine_a = {},
     lualine_b = {},
