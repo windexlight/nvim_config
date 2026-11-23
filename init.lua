@@ -108,7 +108,9 @@ require('lualine').setup {
     },
   },
   sections = {
-    lualine_a = {
+    lualine_a = {'progress'},
+    lualine_b = {'location', 'encoding', 'fileformat'},
+    lualine_c = {
       {
         'filename',
         path = 1,
@@ -121,11 +123,7 @@ require('lualine').setup {
         end,
       },
     },
-    lualine_b = {'progress'},
-    lualine_c = {},
-    lualine_x = {},
-    lualine_y = {{ "b:gitsigns_head", icon = "" }},
-    lualine_z = {
+    lualine_x = {
       {
         function()
           return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
@@ -133,6 +131,8 @@ require('lualine').setup {
         icon = ' ',
       },
     },
+    lualine_y = {'lsp_status'},
+    lualine_z = {{ "b:gitsigns_head", icon = "" }},
   },
   -- winbar = {
   --   lualine_a = {{'filename', path=1}},
