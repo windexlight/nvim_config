@@ -89,6 +89,8 @@ vim.pack.add({
 require('lualine').setup {
   options = {
     globalstatus = true,
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
     disabled_filetypes = {
       statusline = {},
       winbar = {
@@ -105,22 +107,49 @@ require('lualine').setup {
       },
     },
   },
-  winbar = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {'filename'},
+  sections = {
+    lualine_a = {
+      {
+        'filename',
+        path = 1,
+        fmt = function(str)
+          if vim.fn.expand('%') == '' then
+            local ft = vim.bo.filetype
+            return ft ~= '' and ft or str
+          end
+          return str
+        end,
+      },
+    },
+    lualine_b = {'progress'},
+    lualine_c = {},
     lualine_x = {},
-    lualine_y = {},
-    lualine_z = {}
+    lualine_y = {{ "b:gitsigns_head", icon = "" }},
+    lualine_z = {
+      {
+        function()
+          return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
+        end,
+        icon = ' ',
+      },
+    },
   },
-  inactive_winbar = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {'filename'},
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = {}
-  }
+  -- winbar = {
+  --   lualine_a = {{'filename', path=1}},
+  --   lualine_b = {},
+  --   lualine_c = {},
+  --   lualine_x = {'encoding', 'fileformat'},
+  --   lualine_y = {'filetype'},
+  --   lualine_z = {'progress'},
+  -- },
+  -- inactive_winbar = {
+  --   lualine_a = {},
+  --   lualine_b = {},
+  --   lualine_c = {{'filename', path=1}},
+  --   lualine_x = {},
+  --   lualine_y = {},
+  --   lualine_z = {'progress'},
+  -- }
 }
 
 local orig_gen_from_buffer = require("telescope.make_entry").gen_from_buffer
@@ -462,6 +491,7 @@ require('gitsigns').setup {
 }
 
 vim.cmd.colorscheme('catppuccin-macchiato')
+vim.api.nvim_set_hl(0, "MsgArea", { bg = "#1E202F" })
 
 -- Neovide config
 if vim.g.neovide then
