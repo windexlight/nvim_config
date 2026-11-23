@@ -42,6 +42,8 @@ vim.pack.add({
   'https://codeberg.org/LukasPietzschmann/telescope-tabs',
   'https://github.com/nvim-tree/nvim-web-devicons',
   'https://github.com/nvim-telescope/telescope-frecency.nvim',
+  -- Statusline
+  'https://github.com/nvim-lualine/lualine.nvim',
   -- Enhanced quickfix/loclist
   'https://github.com/stevearc/quicker.nvim',
   -- Git integration
@@ -83,6 +85,25 @@ vim.pack.add({
   -- Snippets
   'https://github.com/rafamadriz/friendly-snippets',
 })
+
+require('lualine').setup {
+  winbar = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  inactive_winbar = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {}
+  }
+}
 
 local orig_gen_from_buffer = require("telescope.make_entry").gen_from_buffer
 require("telescope.make_entry").gen_from_buffer = function(opts)
