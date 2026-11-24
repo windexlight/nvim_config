@@ -91,28 +91,36 @@ require('lualine').setup {
     globalstatus = true,
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
-    disabled_filetypes = {
-      statusline = {},
-      winbar = {
-        "neo-tree",
-        "NvimTree",
-        "qf",
-        "toggleterm",
-        "help",
-        "DiffviewFiles",
-        "NeogitStatus",
-        "NeogitLogView",
-        "NeogitDiffView",
-        "gitcommit",
-      },
-    },
   },
   sections = {
     lualine_a = {'progress'},
-    lualine_b = {'location', 'encoding', 'fileformat'},
+    lualine_b = {
+      'location',
+      {
+        'encoding',
+        fmt=function(str) return str:upper() end,
+        show_bom = true,
+      },
+      {
+        'fileformat',
+        symbols = {
+          unix = 'LF',
+          dos = 'CRLF',
+          mac = 'CR',
+        }
+      },
+    },
     lualine_c = {
       {
+        'filetype',
+        icon_only = true,
+        colored = true,
+        padding = { left = 1, right = 0 },
+        separator = { left = '', right = '' },
+      },
+      {
         'filename',
+        padding = { left = 0, right = 1 },
         path = 1,
         fmt = function(str)
           if vim.fn.expand('%') == '' then
@@ -131,25 +139,9 @@ require('lualine').setup {
         icon = ' ',
       },
     },
-    lualine_y = {'lsp_status'},
+    lualine_y = {'diagnostics', 'diff', 'lsp_status'},
     lualine_z = {{ "b:gitsigns_head", icon = "" }},
   },
-  -- winbar = {
-  --   lualine_a = {{'filename', path=1}},
-  --   lualine_b = {},
-  --   lualine_c = {},
-  --   lualine_x = {'encoding', 'fileformat'},
-  --   lualine_y = {'filetype'},
-  --   lualine_z = {'progress'},
-  -- },
-  -- inactive_winbar = {
-  --   lualine_a = {},
-  --   lualine_b = {},
-  --   lualine_c = {{'filename', path=1}},
-  --   lualine_x = {},
-  --   lualine_y = {},
-  --   lualine_z = {'progress'},
-  -- }
 }
 
 local orig_gen_from_buffer = require("telescope.make_entry").gen_from_buffer
