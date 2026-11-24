@@ -121,13 +121,14 @@ require('lualine').setup {
       {
         'filename',
         padding = { left = 0, right = 1 },
-        path = 1,
+        path = 2,
         fmt = function(str)
+          local name = vim.fn.fnamemodify(vim.fs.normalize(str), ':.')
           if vim.fn.expand('%') == '' then
             local ft = vim.bo.filetype
-            return ft ~= '' and ft or str
+            return ft ~= '' and ft or name
           end
-          return str
+          return name
         end,
       },
     },
